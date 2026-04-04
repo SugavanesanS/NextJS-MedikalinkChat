@@ -1,0 +1,195 @@
+$openCloseEasing: 0.86, 0.0, 0.07, 1.0;
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-spacebetween {
+    display: flex;
+    justify-content: space-between;
+}
+
+@mixin circle($size) {
+    width: $size;
+    height: $size;
+    border-radius: $size * 0.5;
+}
+
+@keyframes SCALE-IN {
+    0% {
+        transform: scale(0.99);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.SHOW-BOX {
+    animation: SCALE-IN 0.3s ease-in-out;
+}
+
+.minimized {
+    transition: height 0.9s cubic-bezier($openCloseEasing),
+        width 0.9s cubic-bezier($openCloseEasing),
+        opacity 0.6s ease-in-out,
+        background-color 0.6s ease-in-out,
+        border-radius 0.7s ease-in-out,
+        transform 0.7s ease-in-out;
+    height: 50px;
+    width: 50px;
+    opacity: 0.8;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+
+    &.close {
+        height: 50px!important;
+        width: 50px!important;
+        opacity: 0.8;
+        transform: translateX(110px);
+        background-color: #f0f0f0;
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        transition: height 0.9s cubic-bezier($openCloseEasing),
+            width 0.9s cubic-bezier($openCloseEasing),
+            opacity 0.6s ease-in-out,
+            background-color 0.6s ease-in-out,
+            transform 0.7s ease-in-out;
+    }
+
+    &.open {
+        opacity: 1;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        transition: height 0.9s cubic-bezier($openCloseEasing),
+            width 0.9s cubic-bezier($openCloseEasing),
+            opacity 0.6s ease-in-out,
+            background-color 0.6s ease-in-out,
+            border-radius 0.7s ease-in-out,
+            transform 0.7s ease-in-out;
+    }
+}
+
+.fade {
+    transition: opacity 0.3s ease-in-out;
+
+    &.fade-in {
+        opacity: 1;
+    }
+
+    &.fade-out {
+        opacity: 0;
+    }
+}
+
+/* For opening and closing animation */
+.height-ani {
+    overflow: hidden;
+    transition: height 0.5s ease, opacity 0.5s ease, padding 0.5s ease;
+    opacity: 0;
+    padding: 0;
+    height: 0;
+    /* Start closed */
+}
+
+.height-ani.open {
+    opacity: 1;
+    /* Fade in */
+}
+
+.height-ani.close {
+    opacity: 0;
+    /* Fade out */
+    padding: 0;
+    /* Remove padding */
+    height: 0;
+    /* Collapse the div */
+}
+
+.react-multi-chat {
+    .notification-count {
+        transition: width 0.5s ease, margin-left 0.5s ease;
+
+        &.open {
+            margin-left: 10px;
+            width: 35px;
+        }
+
+        &.close {
+            margin-left: 0px;
+            width: 0px!important;
+            overflow: hidden;
+        }
+    }
+
+    $docTime: 0.3s;
+
+    .msg-att-pdf {
+        transition: height $docTime ease-in, padding $docTime ease-in, overflow $docTime ease-in, opacity $docTime ease-in;
+
+        &.open {
+            height: 56px;
+            padding: 7px 9px;
+            opacity: 1;
+            transition: height $docTime ease-in, padding $docTime ease-in, overflow $docTime ease-in, opacity $docTime ease-in;
+            overflow: visible;
+        }
+
+        &.close {
+            opacity: 0.2;
+            height: 0px;
+            padding: 0px 0px;
+            overflow: hidden;
+        }
+    }
+
+    .chat-textframe {
+        textarea {
+            transition: padding-left 0.2s ease-in;
+            padding-left: 20px;
+        }
+
+        .remove-padding-left {
+            transition: padding-left 0.3s ease-in;
+            padding-left: 0;
+        }
+    }
+}
+
+.extra-count-dd {
+    @include circle(50px);
+    @include flex-center;
+    background: #00000038 !important;
+    animation: blink 3s infinite;
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes blink {
+    0% {
+        opacity: .1;
+    }
+
+    25% {
+        opacity: .3;
+    }
+
+    50% {
+        opacity: .5;
+    }
+
+    50% {
+        opacity: .7;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
