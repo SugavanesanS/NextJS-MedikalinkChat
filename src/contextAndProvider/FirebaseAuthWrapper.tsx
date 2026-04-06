@@ -27,10 +27,8 @@ export const FirebaseContext = createContext<FirebaseContextType>(initialState);
 const FirebaseAuthWrapper: React.FC<PropsWithChildren> = ({ children }) => {
 
     const [data, setData] = useState<FirebaseContextType>(initialState);
-    const [render, setRender] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const userId = GetLoggedUserId();
-    const isLoggingOut = useRef(false); // Track logout state 
+    const [authResolved, setAuthResolved] = useState(false);
+    const isLoggingOut = useRef(false);
     const getFirebaseRefreshToken =  useGet<'/firebase/token'>({
         endpoint: '/firebase/token',
     })
@@ -40,19 +38,19 @@ const FirebaseAuthWrapper: React.FC<PropsWithChildren> = ({ children }) => {
     
 
         const getFcmToken = async () => {
-            console.log("get FCM Token")
-            const permission = await Notification.requestPermission();
-            if (permission === "granted") {
-                console.log("granted ------")
-                const { getMessaging, getToken } = await import('firebase/messaging');
-                import('../services/firebaseConfig').then(({ default: Auth }) => {
-                    const msg = getMessaging(Auth.app);
-                    getToken(msg, {
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === "granted") {
+                    const { getMessaging, getToken } = await import('firebase/messaging');
+                    const { default: AuthApp } = await import('../services/firebaseConfig');
+                    const msg = getMessaging(AuthApp.app);
+                    await getToken(msg, {
                         vapidKey: 'BEI7fWu8AhkZsD4_JXok7pLHYJ9kDZhiFftLgjFbgXfGEBDGBer3l4dJqri-AzJZ9kRCQuB90qXfy97EDcJJGoI',
                     });
-                });
-            } else if (permission === "denied") {
-                alert("You denied for the notification");
+                }
+            } catch (err: any) {
+                // FCM token subscription failed - non-critical, chat still works
+                console.warn('FCM token error (non-critical):', err?.code || err?.message);
             }
         };
 
@@ -65,90 +63,29 @@ const FirebaseAuthWrapper: React.FC<PropsWithChildren> = ({ children }) => {
 
 
             if (user) {
-
-                setData((d) => ({
-                    ...d,
-                    auth: true,
-                    fbUid: user.uid,
-                    user: user
-                }));
+                setData((d) => ({ ...d, auth: true, fbUid: user.uid, user: user }));
             } else {
-
-            /*    let fbUid = sessionStorage.getItem("fb_uid")
-                if(fbUid){
-                    
-                    setData((d) => ({
-                        auth: true,
-                        fbUid: fbUid,
-                        user: user
-                    }));
-                    return
-                } */
-                
-                    console.log("track is logged out")
+                console.log("track is logged out")
                 if (!isLoggingOut.current && GetFirebaseToken()) {
-                    signInWithCustomToken(Auth, GetFirebaseToken()).catch(() => 
-                        { 
-                            console.log("error - from signinwith custom token ") //2 hour expire
-                        
-                            getFirebaseRefreshToken.get?.({
-                                      
-                            }).then((data) => {
-                                signInWithCustomToken(Auth, data.data.fb_token)
-
-                                console.log("output - result ", data.data)
-                            })
-                        });
+                    signInWithCustomToken(Auth, GetFirebaseToken()).catch(() => {
+                        console.log("error - from signinwith custom token ")
+                        getFirebaseRefreshToken.get?.({}).then((data) => {
+                            signInWithCustomToken(Auth, data.data.fb_token)
+                        })
+                    });
                 }
-                setData((d) => ({
-                    ...d,
-                    auth: false,
-                    fbUid: null,
-                    user: null
-                }))
+                setData((d) => ({ ...d, auth: false, fbUid: null, user: null }))
             }
+            setAuthResolved(true);
+            setAuthResolved(true);
         });
-
-    console.log('Requesting permission...');
-    Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-        console.log('Notification permission granted.');
-        }
-    });
-
-    /*  getToken(messaging, { vapidKey: 'BEI7fWu8AhkZsD4_JXok7pLHYJ9kDZhiFftLgjFbgXfGEBDGBer3l4dJqri-AzJZ9kRCQuB90qXfy97EDcJJGoI' }).then((currentToken) => {
-        if (currentToken) {
-            console.log("Token --- get ", currentToken)
-            // Send the token to your server and update the UI if necessary
-            // ...
-        } else {
-            // Show permission request UI
-            console.log('No registration token available. Request permission to generate one.');
-            // ...
-        }
-        }).catch((err) => {
-        console.log('An error occurred while retrieving token. ', err);
-        // ...
-        }); */
-
-
 
         return () => unsubscribe();
     }, []);
 
-    useEffect(() => {
-        if (!userId) {
-            setTimeout(() => {
-                setRender(_ => !_);
-            }, 500);
-        } else {
-            setLoading(false);
-        }
-    }, [render]);
-
     return (
         <FirebaseContext.Provider value={{ ...data, onLogout: () => isLoggingOut.current = true }}>
-            {!!data.fbUid && !loading && children}
+            {authResolved && children}
         </FirebaseContext.Provider>
     );
 };

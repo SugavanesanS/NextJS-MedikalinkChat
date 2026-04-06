@@ -7,10 +7,9 @@
     "start:dev": "node ChangeEnv dev && next dev",
     "start:demo": "node ChangeEnv demo && next dev",
     "start:prod": "node ChangeEnv prod && next dev",
-    "build:dev": "node ChangeEnv dev && next build",
-    "build:demo": "node ChangeEnv demo && next build",
-    "build:prod": "node ChangeEnv prod && next build",
-    "generate-sw": "node GenerateSW",
+    "build:dev": "node ChangeEnv dev && next build && node PostBuild",
+    "build:demo": "node ChangeEnv demo && next build && node ToLiveMove",
+    "build:prod": "node ChangeEnv prod && next build && node ToLiveMove",
     "serve": "next start",
     "type-check": "tsc --noEmit",
     "lint": "eslint"
@@ -39,7 +38,6 @@
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@types/lodash": "^4.17.24",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -47,8 +45,8 @@
     "@types/react-speech-recognition": "^3.9.6",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
+    "fs-extra": "^11.3.4",
     "sass": "^1.99.0",
-    "tailwindcss": "^4",
     "typescript": "^5"
   }
 }

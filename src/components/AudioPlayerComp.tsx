@@ -90,7 +90,7 @@ export function useAudio({ src = "", id }: { src?: string; id: string }): {
     const [duration, setDuration] = useState<number>(0);
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const audio = AudioSingleton.getInstance(id);
-    const controllerRef = useRef<HTMLAudioElement>();
+    const controllerRef = useRef<HTMLAudioElement>(null);
 
 
     const handleTimeUpdate = (time: number) => {

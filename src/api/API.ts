@@ -28,7 +28,7 @@ const GetHeaders = {
     'credentials': 'include'
 };
 
-export const AppFetch = async (url, requestBody) => {
+export const AppFetch = async (url: string, requestBody: any) => {
     requestBody?.headers ? requestBody.headers.Authorization = `Bearer ${GetReferenceKey()}` : requestBody.headers = { Authorization: `Bearer ${GetReferenceKey()}` }
     if (requestBody?.method == "POST") {
         const csrf = (document.head.querySelector('meta[name="csrf-token"]') as any)?.content || '58tJ1SuopeSc7uOwqzNV4fy8IV7YZjOaU4fr2yJB'
@@ -50,7 +50,7 @@ export const useGet: useGetType = ({ endpoint }: { endpoint: keyof AllApiTypes }
     const [body, setBody] = useState<{
         reqBody?: any;
     }>();
-    const get = useCallback(async (newBody) => {
+    const get = useCallback(async (newBody?: any) => {
         const apiBody = newBody || body;
         setBody(apiBody);
         const params = new URLSearchParams({
@@ -87,7 +87,7 @@ export const useGet: useGetType = ({ endpoint }: { endpoint: keyof AllApiTypes }
 
 export const usePost: usePostType = ({ endpoint, formData }) => {
     const [loader, setLoader] = useState(false);
-    const post = useCallback(async (apiBody) => {
+    const post = useCallback(async (apiBody: any) => {
         setLoader(true);
 
         try {

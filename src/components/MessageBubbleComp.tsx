@@ -143,8 +143,8 @@ export const MessageBubbleComp: FC<ChatMessageFireBase & { messageDelete: (messa
                                 return (
                                     <div className="days-tag"><span>{i18n.t('you_added_Dr_to_this_conversation_on',
                                         {
-                                            you: message?.sentByFbUserId == firebaseAuth.fbUid ? i18n.t("you") :  UserPrefix[user.user_type]  + `${user?.prenom} ${user?.nom}`,
-                                                to: message?.sentToId == userId ? i18n.t("you") : ((sentToUser.user_type == 4 ? "le " : '') + UserPrefix[sentToUser.user_type]  + `${sentToUser?.prenom} ${sentToUser?.nom}`),
+                                            you: message?.sentByFbUserId == firebaseAuth.fbUid ? i18n.t("you") :  UserPrefix[user?.user_type]  + `${user?.prenom} ${user?.nom}`,
+                                                to: message?.sentToId == userId ? i18n.t("you") : ((sentToUser?.user_type == 4 ? "le " : '') + UserPrefix[sentToUser?.user_type]  + `${sentToUser?.prenom} ${sentToUser?.nom}`),
                                             date: moment(TimeCheckAndConvert(message.sentAt)).format(`DD/MM/YYYY`),
                                             time: moment(TimeCheckAndConvert(message.sentAt)).format(`HH:mm`)
                                         })}</span>
