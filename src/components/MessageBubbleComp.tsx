@@ -73,7 +73,6 @@ export const MessageBubbleComp: FC<ChatMessageFireBase & { messageDelete: (messa
     const user = userList[message.sentByFbUserId]
     const sentToUser = userList[message.sentToId]
 
-    console.log("testing.....")
 
     const seenPopover = (
         <div className="seenPopup" style={{ zIndex: 1000, width: '200px' }}><div>  <ReadMessageUsers readUsers={unreadMessageUserCount} message={message} userList={userList}></ReadMessageUsers></div></div>

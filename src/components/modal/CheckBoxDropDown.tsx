@@ -79,7 +79,7 @@ const CheckboxDropdown: React.FC<CheckboxDropdownProps> = ({ items, setItems }) 
                 />
             </div>
 
-            <Modal Modal
+            <Modal
                 backdropClassName="search-filter-class"
                 backdrop="static"
                 show={isModalVisible}

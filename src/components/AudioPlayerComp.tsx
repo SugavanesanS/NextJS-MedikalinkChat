@@ -26,7 +26,6 @@ const AudioPlayerComp = ({ uri, name, id }: { uri: string, name: string, id: str
                     value={time}
                     step={0.1}
                     max={duration}
-                    defaultValue={0}
                     onChange={(e) => {
                         const val = +e.target.value;
                         setCurrentTime(val);

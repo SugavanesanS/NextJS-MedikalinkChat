@@ -69,7 +69,10 @@ const UserBubbleList: FC<{ isCreate: boolean, filterParticipants: (FBParticipant
                     return (
                         <div key={data.id} className='grp-meb'>
 
-                            {data.profile || user.has_profile_pic == 1 ? <UserBubbleComp user={user} /> : <div className="usr-icon">{ShortProfileName(data.name)}</div>}
+                            {data.profile && data.profile.trim() !== ""
+                                ? <UserBubbleComp user={user} />
+                                : <div className="usr-icon">{ShortProfileName(data.name)}</div>
+                            }
 
                             <span className='usr-nam' title={data.name}>{data.name}</span>
                             {(isCreate && data.userType !== 1) && <span onClick={() => {
