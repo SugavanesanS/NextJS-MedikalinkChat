@@ -146,17 +146,20 @@ export const useDiscussionListHook = () => {
     }, [fireAuth.fbUid]);
 };
 
+const emptyArray: FBDiscussionList[] = [];
+
 const getList = createSelector(
-    [(state: RootState) => state.discussion.list.archivedDiscussionList || [],
-    (state: RootState) => state.discussion.list.discussionList || []],
+    [
+        (state: RootState) => state.discussion.list.archivedDiscussionList ?? emptyArray,
+        (state: RootState) => state.discussion.list.discussionList ?? emptyArray
+    ],
     (list, list2) => {
-        let data = {}
+        const data: Record<string, boolean> = {}
         list.concat(list2).forEach((item) => {
             Object.values(item.participants).forEach((el) => {
                 if (el.fbUserId && !data[el.fbUserId]) {
                     data[el.fbUserId] = true
                 }
-
             })
         })
         return Object.keys(data)

@@ -24,7 +24,7 @@ moment.updateLocale(lang, {
 
 i18n.use(initReactI18next).init({
     lng: lang,
-    debug: process.env.NEXT_PUBLIC_ENV == 'dev',
+    debug: false,
     compatibilityJSON: 'v3',
     resources: {
         en: {
